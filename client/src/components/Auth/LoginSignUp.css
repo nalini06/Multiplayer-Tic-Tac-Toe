@@ -1,0 +1,55 @@
+/* LoginSignUp.css */
+body {
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh; /* Ensure the content takes up at least the full viewport height */
+    background-color: #0f1b21; /* Set a background color for the body */
+  }
+  
+  .LoginAndSignUp {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+  
+  .form {
+    background-color: 0f1b21;
+    padding: 20px;
+    border-radius: 5px;
+
+    width: 300px;
+    margin: 0 auto; /* Center the form horizontally */
+    text-align: center;
+    margin-bottom: 20px; /* Add space between the form and the toggle-form */
+  }
+  
+  .input-box {
+    width: 100%;
+    padding: 1px;
+    margin-bottom: 15px; /* Add space between the input boxes */
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    text-align: center; /* Center-align text within the input boxes */
+  }
+  
+  .action-button {
+    width: 100%;
+    padding: 10px;
+    background-color: #007bff; /* Set button background color to blue */
+    color: white; /* Set button text color to white */
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+    margin-top: 15px; /* Add space between the button and input boxes */
+  }
+  
+  .toggle-form {
+    text-align: center;
+    font-weight: bold;
+    cursor: pointer;
+    color: white; /* Set text color to white */
+  }
+  

@@ -1,16 +1,18 @@
-import React, { useState, useRef } from 'react'
+import React, { useState, useRef, useEffect } from 'react'
 import './TicTacToe.css'
 import circle from '../assests/circle.png'
 import cross from '../assests/cross.png'
-
+import  io  from 'socket.io-client';
+const socket = io.connect('http://localhost:3001');
 let data = ["", "", "", "", "", "", "", "", "" ]
 
 
 
 
-const TicTacToe = () =>{
+const TicTacToe = ({userName}) =>{
     let [count, setCount] = useState(0);
     let [lock, setLock]  = useState(false)
+    const [data, setData] = useState(["", "", "", "", "", "", "", "", ""]);
     let titleRef = useRef(null)
     let box1 = useRef(null);
     let box2 = useRef(null);
@@ -22,21 +24,57 @@ const TicTacToe = () =>{
     let box8 = useRef(null);
     let box9 = useRef(null); 
     let box_array = [box1, box2, box3, box4, box5, box6, box7, box8, box9]
+    
+    useEffect( () =>{
+         socket.on("winner", (payLoad) =>{
+             won(payLoad.winner);
+         })
+    })
+
+    useEffect( () =>{
+          socket.on("receive_message", (payLoad) =>{
+             console.log("Got data back");
+             setLock(false);
+             const dataArray = payLoad.data;
+             console.log(dataArray);
+             setData(dataArray);
+             setCount(payLoad.whooseChance)
+             for (let i = 0; i < dataArray.length; i++) {
+                if (dataArray[i] === 'x') {
+                  box_array[i].current.innerHTML = `<img src='${cross}'></img>`;
+                } else if (dataArray[i] === 'o') {
+                  box_array[i].current.innerHTML = `<img src='${circle}'></img>`;
+                } else {
+                  box_array[i].current.innerHTML = ""; // Clear the box if data is empty
+                }
+              }
+          })
+    }, [socket])
+    
+
+
     const toggle = (e, num) =>{
        if(lock){
         return 0;
        }
 
+    
        if(count%2 === 0){
-        e.target.innerHTML = `<img src = '${circle}' ></img> `;
+        e.target.innerHTML = `<img src = '${cross}' ></img> `;
         data[num] = "x";
         setCount(++count);
+        socket.emit("send_data", {data, "whooseChance": count})
+        checkWin()
+        setLock(true);
        }else{
-        e.target.innerHTML = `<img src = '${cross}' ></img> `;
-        data[num] = "0";
+        e.target.innerHTML = `<img src = '${circle}' ></img> `;
+        data[num] = "o";
         setCount(++count);
+        socket.emit("send_data", {data, "whooseChance": count})
+        setLock(true);
+        checkWin()
        }
-       checkWin()
+
     }
 
     const checkWin = () =>{
@@ -64,11 +102,12 @@ const TicTacToe = () =>{
     }
 
     const won = (winner) =>{
+        socket.emit("won", {"winner": winner})
         setLock(true);
         if(winner ==="x"){
-            titleRef.current.innerHTML = `Congratulations: <img src=${circle} wins>`
-        }else{
             titleRef.current.innerHTML = `Congratulations: <img src=${cross} wins>`
+        }else{
+            titleRef.current.innerHTML = `Congratulations: <img src=${circle} wins>`
         }
     }
 
@@ -79,12 +118,17 @@ const TicTacToe = () =>{
         box_array.map( (e)=>{
             e.current.innerHTML = ""
         } )
+        socket.emit('updateGame', data);
     }
 
     return (
         <div className = 'container'>
            
            <h1 className = "title" ref={titleRef}>Tic Tac Toe Game In <span>React</span></h1>
+           <h4 className='userName' >Player: {userName}</h4> {/* Display the userName here */}
+           <div>
+             
+           </div>
            <div className = "board">
                <div className = "row1">
                   <div className = "boxes" ref = {box1} onClick={(e)=>{toggle(e, 0)}} ></div>
