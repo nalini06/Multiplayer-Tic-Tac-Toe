@@ -7,7 +7,7 @@ import io from 'socket.io-client';
 import LoginSignup from './components/Auth/LoginSignUp';
 import Cookies from 'js-cookie';
 import GameMenu from './components/gameMenu/GameMenu';
-const socket = io.connect('http://localhost:3001');
+const socket = io.connect('https://tic-tac-toe-server-eohu.onrender.com');
 
 function App() {
   let componentToRender;
