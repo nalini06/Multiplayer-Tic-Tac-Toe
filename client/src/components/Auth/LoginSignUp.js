@@ -12,7 +12,7 @@ const LoginSignup = ({ setIsAuth, setUserName, setGameMenu, setResumeGame, setGa
     
     try {
       // Prepare data to send to the server for authentication
-      const userData = { username, password };
+      const userData = { username, password, "previousState": false, "gameState": []};
 
       // Send a POST request to your server for authentication
       const method = isLogin ? 'login' : 'signup';
