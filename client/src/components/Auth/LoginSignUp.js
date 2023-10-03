@@ -26,14 +26,15 @@ const LoginSignup = ({ setIsAuth, setUserName, setGameMenu, setResumeGame, setGa
       });
 
       const {status, message, user, token} = await response.json();
-      
+      const receivedUser = await user.json();
       console.log(status);
-      
+      console.log("user " + user);
+      console.log("receivedUser "+ receivedUser);
       if (response.ok) {
         // Authentication successful
-        if(user.previousState){
+        if(receivedUser.previousState){
           
-          setGameState(user.gameState)
+          setGameState(receivedUser.gameState)
           setResumeGame(true);
         }
         setIsAuth(true);
