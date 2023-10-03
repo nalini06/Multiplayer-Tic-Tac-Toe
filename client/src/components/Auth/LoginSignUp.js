@@ -36,8 +36,8 @@ const LoginSignup = ({ setIsAuth, setUserName, setGameMenu, setResumeGame, setGa
           Cookies.set('token',token);
           Cookies.set('username', username)
         }else{
-          if(receivedUser.previousState){
-            setGameState(receivedUser.gameState)
+          if(user.previousState){
+            setGameState(user.gameState)
             setResumeGame(true);
           }
           setIsAuth(true);
