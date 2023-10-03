@@ -16,7 +16,7 @@ const LoginSignup = ({ setIsAuth, setUserName, setGameMenu, setResumeGame, setGa
 
       // Send a POST request to your server for authentication
       const method = isLogin ? 'login' : 'signup';
-      setInstruction((isLogin ? "Logging" : "Signing " ) +"you in please wait...")
+      setInstruction((isLogin ? "Logging" : "Signing " ) +" you in please wait...")
       const response = await fetch(`https://tic-tac-toe-server-eohu.onrender.com/api/users/${method}`, {
         method: 'POST',
         headers: {

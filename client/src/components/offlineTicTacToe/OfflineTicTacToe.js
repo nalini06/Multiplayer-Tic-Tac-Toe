@@ -95,7 +95,7 @@ const OfflineTicTacToe = ({userName, resumeGame, gameState, setIsAuth, setGameMe
             previousState: false
         }
         try {
-            const response = await axios.post('http://localhost:3001/api/game/saveGame', request);
+            const response = await axios.post('https://tic-tac-toe-server-eohu.onrender.com/api/game/saveGame', request);
             // Handle the response from the server here
             console.log(response.data); // Assuming the server returns JSON data
         } catch (error) {
@@ -111,7 +111,7 @@ const OfflineTicTacToe = ({userName, resumeGame, gameState, setIsAuth, setGameMe
             previousState: true
         }
         try {
-            const response = await axios.post('http://localhost:3001/api/game/saveGame', request);
+            const response = await axios.post('https://tic-tac-toe-server-eohu.onrender.com/api/game/saveGame', request);
             // Handle the response from the server here
             console.log(response.data); // Assuming the server returns JSON data
         } catch (error) {
