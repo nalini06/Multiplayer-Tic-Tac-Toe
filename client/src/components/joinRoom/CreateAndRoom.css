@@ -57,3 +57,12 @@
   color: orange;
   font-size: 20px; /* Adjust the font size as needed */
 }
+
+.subtitle{
+  margin-top: 10px;
+  color: #26ffcb;
+  font-size: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
