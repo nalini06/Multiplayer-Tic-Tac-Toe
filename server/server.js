@@ -19,7 +19,7 @@ app.use('/api/game', saveGameRoute)
 
 const io = new Server( server, {
   cors: {
-    origin: "http://localhost:3000",
+    origin: "https://tic-tac-toe-client-1fru.onrender.com/",
     methods: ["GET", "POST"]
   }
 } );

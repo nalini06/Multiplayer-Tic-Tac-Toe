@@ -5,16 +5,18 @@ const LoginSignup = ({ setIsAuth, setUserName, setGameMenu, setResumeGame, setGa
   const [username, setUsername] = useState('');
   const [isLogin, setIsLogin] = useState(true);
   const [password, setPassword] = useState('');
-
+  const [instruction, setInstruction] = useState('')
       
   
   const handleLoginSignup = async () => {
+    
     try {
       // Prepare data to send to the server for authentication
       const userData = { username, password };
 
       // Send a POST request to your server for authentication
       const method = isLogin ? 'login' : 'signup';
+      setInstruction((isLogin ? "Logging" : "Signing " ) +"you in please wait...")
       const response = await fetch(`http://localhost:3001/api/users/${method}`, {
         method: 'POST',
         headers: {
@@ -55,6 +57,7 @@ const LoginSignup = ({ setIsAuth, setUserName, setGameMenu, setResumeGame, setGa
     <div className="LoginAndSignUp">
       <div className={`form ${isLogin ? 'login-form' : 'signup-form'}`}>
         <h2 className='title'>{isLogin ? 'Login' : 'Signup'}</h2>
+        <h3 className='subtitle'> {instruction}</h3>
         <input
           type="text"
           placeholder="Username"
