@@ -26,22 +26,28 @@ const LoginSignup = ({ setIsAuth, setUserName, setGameMenu, setResumeGame, setGa
       });
 
       const {status, message, user, token} = await response.json();
-      const receivedUser = await user.json();
-      console.log(status);
-      console.log("user " + user);
-      console.log("receivedUser "+ receivedUser);
+      
       if (response.ok) {
         // Authentication successful
-        if(receivedUser.previousState){
-          
-          setGameState(receivedUser.gameState)
-          setResumeGame(true);
+        if(!isLogin){
+          setIsAuth(true);
+          setUserName(username)
+          setGameMenu(true)
+          Cookies.set('token',token);
+          Cookies.set('username', username)
+        }else{
+          if(receivedUser.previousState){
+            setGameState(receivedUser.gameState)
+            setResumeGame(true);
+          }
+          setIsAuth(true);
+          setUserName(username)
+          setGameMenu(true)
+          Cookies.set('token',token);
+          Cookies.set('username', username)
         }
-        setIsAuth(true);
-        setUserName(username)
-        setGameMenu(true)
-        Cookies.set('token',token);
-        Cookies.set('username', username)
+
+       
       } else {
         // Authentication failed
         console.log('Authentication failed');
