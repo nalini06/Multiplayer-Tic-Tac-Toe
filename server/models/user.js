@@ -9,6 +9,14 @@ const UserSchema = new mongoose.Schema({
     password:{
         type: String,
         required: [true, "Must provide password"]
+    },
+    gameState:{
+        type: Array,
+        default: null
+    },
+    previousState: {
+        type: Boolean,
+        default: false
     }
 })
 

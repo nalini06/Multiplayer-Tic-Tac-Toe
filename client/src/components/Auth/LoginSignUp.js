@@ -1,15 +1,13 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './LoginSignUp.css';
 import Cookies from 'js-cookie';
-const LoginSignup = ({ setIsAuth, setUserName }) => {
+const LoginSignup = ({ setIsAuth, setUserName, setGameMenu, setResumeGame, setGameState }) => {
   const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
   const [isLogin, setIsLogin] = useState(true);
-  const token = Cookies.get("token");
-  console.log(token);
-  if(token){
-    setIsAuth(true);
-  }
+  const [password, setPassword] = useState('');
+
+      
+  
   const handleLoginSignup = async () => {
     try {
       // Prepare data to send to the server for authentication
@@ -25,16 +23,22 @@ const LoginSignup = ({ setIsAuth, setUserName }) => {
         body: JSON.stringify(userData),
       });
 
-      const {status, message} = await response.json();
+      const {status, message, user, token} = await response.json();
       
       console.log(status);
       
       if (response.ok) {
         // Authentication successful
+        if(user.previousState){
+          
+          setGameState(user.gameState)
+          setResumeGame(true);
+        }
         setIsAuth(true);
         setUserName(username)
-        const {token} = await response.json()
-        Cookies.set('token', token, { expires: 7 });
+        setGameMenu(true)
+        Cookies.set('token',token);
+        Cookies.set('username', username)
       } else {
         // Authentication failed
         console.log('Authentication failed');

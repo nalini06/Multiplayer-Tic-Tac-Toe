@@ -2,17 +2,14 @@ import React, { useState, useRef, useEffect } from 'react'
 import './TicTacToe.css'
 import circle from '../assests/circle.png'
 import cross from '../assests/cross.png'
-import  io  from 'socket.io-client';
-const socket = io.connect('http://localhost:3001');
 let data = ["", "", "", "", "", "", "", "", "" ]
 
-
-
-
-const TicTacToe = ({userName}) =>{
+const TicTacToe = ({userName, roomName, socket}) =>{
     let [count, setCount] = useState(0);
     let [lock, setLock]  = useState(false)
-    const [data, setData] = useState(["", "", "", "", "", "", "", "", ""]);
+    const initialData = ["", "", "", "", "", "", "", "", ""];
+    const [gameStateData, setGameStateData] = useState(initialData);
+   // const [data, setData] = useState(["", "", "", "", "", "", "", "", ""]);
     let titleRef = useRef(null)
     let box1 = useRef(null);
     let box2 = useRef(null);
@@ -33,6 +30,23 @@ const TicTacToe = ({userName}) =>{
 
     useEffect( () =>{
           socket.on("receive_message", (payLoad) =>{
+            data  = payLoad.data;
+            for(let i = 0 ;i<box_array.length; i++){
+                if(box_array[i].current === null){
+                    box_array[i].current = ""
+                }
+                if (data[i] === 'x') {
+                    box_array[i].current.innerHTML = `<img src='${cross}'></img>`;
+                  } else if (data[i] === 'o') {
+                    box_array[i].current.innerHTML = `<img src='${circle}'></img>`;
+                  }else {
+                  box_array[i].current.innerHTML = ""; // Clear the box if data is empty
+                }
+            }
+           
+            setLock(false);
+            setCount(payLoad.whooseChance)
+            /*
              console.log("Got data back");
              setLock(false);
              const dataArray = payLoad.data;
@@ -48,7 +62,9 @@ const TicTacToe = ({userName}) =>{
                   box_array[i].current.innerHTML = ""; // Clear the box if data is empty
                 }
               }
+              */
           })
+          
     }, [socket])
     
 
@@ -63,14 +79,15 @@ const TicTacToe = ({userName}) =>{
         e.target.innerHTML = `<img src = '${cross}' ></img> `;
         data[num] = "x";
         setCount(++count);
-        socket.emit("send_data", {data, "whooseChance": count})
+        console.log("boxArray "+ box_array);
+        socket.emit("send_data", {roomName, data, "whooseChance": count})
         checkWin()
         setLock(true);
        }else{
         e.target.innerHTML = `<img src = '${circle}' ></img> `;
         data[num] = "o";
         setCount(++count);
-        socket.emit("send_data", {data, "whooseChance": count})
+        socket.emit("send_data", {roomName, data, "whooseChance": count})
         setLock(true);
         checkWin()
        }
@@ -102,7 +119,7 @@ const TicTacToe = ({userName}) =>{
     }
 
     const won = (winner) =>{
-        socket.emit("won", {"winner": winner})
+        socket.emit("won", {roomName, "winner": winner})
         setLock(true);
         if(winner ==="x"){
             titleRef.current.innerHTML = `Congratulations: <img src=${cross} wins>`
@@ -131,22 +148,22 @@ const TicTacToe = ({userName}) =>{
            </div>
            <div className = "board">
                <div className = "row1">
-                  <div className = "boxes" ref = {box1} onClick={(e)=>{toggle(e, 0)}} ></div>
-                  <div className = "boxes" ref = {box2} onClick={(e)=>{toggle(e, 1)}} ></div>
-                  <div className = "boxes" ref = {box3} onClick={(e)=>{toggle(e, 2)}} ></div>
+                  <div className = "boxes" ref = {box1} onClick={(e)=>{toggle(e, 0)}} >  </div>
+                  <div className = "boxes" ref = {box2} onClick={(e)=>{toggle(e, 1)}} >  </div>
+                  <div className = "boxes" ref = {box3} onClick={(e)=>{toggle(e, 2)}} >  </div>
                </div>
                <div className = "row2">
-                  <div className = "boxes" ref = {box4} onClick={(e)=>{toggle(e, 3)}} ></div>
-                  <div className = "boxes" ref = {box5} onClick={(e)=>{toggle(e, 4)}}  ></div>
-                  <div className = "boxes" ref = {box6} onClick={(e)=>{toggle(e, 5)}} ></div>
+                  <div className = "boxes" ref = {box4} onClick={(e)=>{toggle(e, 3)}} >  </div>
+                  <div className = "boxes" ref = {box5} onClick={(e)=>{toggle(e, 4)}} >  </div>
+                  <div className = "boxes" ref = {box6} onClick={(e)=>{toggle(e, 5)}} >  </div>
                </div>
                <div className = "row3">
-                  <div className = "boxes" ref = {box7} onClick={(e)=>{toggle(e, 6)}} ></div>
-                  <div className = "boxes" ref = {box8} onClick={(e)=>{toggle(e, 7)}} ></div>
-                  <div className = "boxes" ref = {box9} onClick={(e)=>{toggle(e, 8)}} ></div>
+                  <div className = "boxes" ref = {box7} onClick={(e)=>{toggle(e, 6)}} >  </div>
+                  <div className = "boxes" ref = {box8} onClick={(e)=>{toggle(e, 7)}} >  </div>
+                  <div className = "boxes" ref = {box9} onClick={(e)=>{toggle(e, 8)}} >  </div>
                </div>
            </div>
-           <button className = "reset" onClick={ ()=>{reset()} }>Reset</button>
+           
         </div>
     )
 }

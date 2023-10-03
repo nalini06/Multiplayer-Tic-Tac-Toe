@@ -1,30 +1,41 @@
 import './CreateAndRoom.css';
 import Cookies from 'js-cookie';
 import React, { useState, useEffect } from 'react';
-import io from 'socket.io-client';
-const socket = io.connect('http://localhost:3001');
 
 
-function JoinRoom({setIsAuth, userName}) {
-  const [roomName, setRoomName] = useState('');
 
-   
+
+function JoinRoom({setIsAuth, userName, socket, setInRoom, setRoomName}) {
+
+  const [roomNameInput, setRoomNameInput] = useState('');
+
+  useEffect(() => {
+    socket.on("game_start", () =>{
+      console.log("game started");
+      setInRoom(true);
+    });
+   }, [socket]); // Add inRoom as a dependency 
+
   const handleLogOut = () => {
      Cookies.set('token', '')
      setIsAuth(false);
   }
 
   const handleCreateRoom = () => {
-    if (roomName.trim() !== '') {
-      socket.emit('create_room', { roomName });
+    if (roomNameInput.trim() !== '') {
+      socket.emit('start_game',  roomNameInput );
+      setInRoom(true);
       console.log("created room");
     }
   }
 
   const handleJoinRoom = () => {
-    socket.emit('join_room', { roomName });
+    socket.emit('join_room', roomNameInput );
+    setRoomName(roomNameInput);
     console.log("Joined room");
   };
+
+
 
   return (
     <div className="JoinAndCreateRoom">
@@ -35,8 +46,8 @@ function JoinRoom({setIsAuth, userName}) {
           type="text"
           placeholder="Enter room name"
           className="input-box"
-          value={roomName}
-          onChange={(e) => setRoomName(e.target.value)}
+          value={roomNameInput}
+          onChange={(e) => setRoomNameInput(e.target.value)}
         />
       </div>
       <div className="button-container">

@@ -1,0 +1,11 @@
+.logout-button {
+    position: fixed;
+    top: 10px; /* Adjust the top positioning as needed */
+    right: 10px; /* Adjust the right positioning as needed */
+    background-color: #f44336; /* Red color, change as needed */
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+  }

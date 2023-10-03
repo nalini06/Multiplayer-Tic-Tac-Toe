@@ -41,7 +41,7 @@ exports.signup = async (req, res, next) =>{
 exports.login = async (req, res, next) =>{
      const username = req.body.username;
      const password = req.body.password
-
+     console.log("login" + password);
      const newUser = await user.findOne({username})
      console.log(await bcrypt.compare(password, newUser.password));
      
@@ -52,9 +52,10 @@ exports.login = async (req, res, next) =>{
          })
      }else{
         const token = signToken(newUser._id)
-
+        console.log(token);
         res.status(201)
         .json({
+            user: newUser,
            status: 'success',
            token
         })
