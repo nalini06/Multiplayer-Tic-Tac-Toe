@@ -19,6 +19,7 @@ exports.signup = async (req, res, next) =>{
                 "message" : "username already exists"
             })
         }
+        
         const newUser = await user.create(req.body)
         console.log(newUser);
         const token = jwt.sign({id : newUser._id}, process.env.SECRET_STR, {
