@@ -1,7 +1,20 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './GameMenu.css'; // Import the CSS file
-
-function GameMenu({ setOnline, setOffline, resumeGame, setResumeGame, setIsAuth }) {
+import axios from 'axios'
+function GameMenu({ setOnline, setOffline, resumeGame, setResumeGame, setIsAuth, setGameState }) {
+  
+  /*
+  useEffect(async() =>{
+         const response = await axios('http://localhost:3001/api/game/getUser');
+         const user = await response.json();
+         if(user.previousState){
+             setResumeGame(true);
+             setGameState(user.gameState);
+         }
+  })
+  */
+  
+  
   const handleResumeGame = () => {
      setOffline(true); 
   }

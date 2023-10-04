@@ -5,11 +5,9 @@ import cross from '../assests/cross.png'
 import axios from 'axios'
 let data = ["", "", "", "", "", "", "", "", "" ]
 
-const TicTacToe = ({userName, roomName, socket ,playersData}) =>{
+const TicTacToe = ({userName, roomName, socket ,setOnline, setInRoom}) =>{
     let [count, setCount] = useState(0);
     let [lock, setLock]  = useState(false)
-    let [xPlayer, setXPlayer] = useState(false)
-    let [oPlayer, setOPlayer] = useState('')
     let titleRef = useRef(null)
     let box1 = useRef(null);
     let box2 = useRef(null);
@@ -23,6 +21,13 @@ const TicTacToe = ({userName, roomName, socket ,playersData}) =>{
     let box_array = [box1, box2, box3, box4, box5, box6, box7, box8, box9]
     
     useEffect( () =>{
+         socket.on("play_again", () =>{
+            data = ["", "", "", "", "", "", "", "", "", ""];
+            box_array.map( (e)=>{
+            e.current.innerHTML = ""
+           })
+         })
+
          socket.on("winner", (payLoad) =>{
              won(payLoad.winner);
          })
@@ -30,9 +35,6 @@ const TicTacToe = ({userName, roomName, socket ,playersData}) =>{
 
     useEffect( () =>{
           socket.on("receive_message", (payLoad) =>{
-            if(userName == payLoad.startedBy){
-                setXPlayer(true);
-            }
             data  = payLoad.data;
             for(let i = 0 ;i<box_array.length; i++){
                 if(box_array[i].current === null){
@@ -77,7 +79,6 @@ const TicTacToe = ({userName, roomName, socket ,playersData}) =>{
         return 0;
        }
 
-    
        if(count%2 === 0){
         e.target.innerHTML = `<img src = '${cross}' ></img> `;
         data[num] = "x";
@@ -128,7 +129,7 @@ const TicTacToe = ({userName, roomName, socket ,playersData}) =>{
             "username" : userName
         }
         try{
-            await axios("https://tic-tac-toe-server-eohu.onrender.com/api/game/updateWin", payLoad) 
+            await axios.post("https://tic-tac-toe-server-eohu.onrender.com/api/game/updateWin", payLoad) 
         }catch(error){
             console.log(error);
         }
@@ -148,8 +149,13 @@ const TicTacToe = ({userName, roomName, socket ,playersData}) =>{
         titleRef.current.innerHTML = 'Tic Tac Toe'
         box_array.map( (e)=>{
             e.current.innerHTML = ""
-        } )
+        })
         socket.emit('updateGame', data);
+    }
+
+    const handleMenu = () =>{
+        setInRoom(false);
+        setOnline(false);
     }
 
     return (
@@ -173,7 +179,7 @@ const TicTacToe = ({userName, roomName, socket ,playersData}) =>{
                   <div className = "boxes" ref = {box9} onClick={(e)=>{toggle(e, 8)}} >  </div>
                </div>
            </div>
-           
+           <button className="logout-button"onClick={handleMenu}>Exit Room</button>
         </div>
     )
 }

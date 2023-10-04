@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import './LoginSignUp.css';
-import Cookies from 'js-cookie';
 const LoginSignup = ({ setIsAuth, setUserName, setGameMenu, setResumeGame, setGameState }) => {
   const [username, setUsername] = useState('');
   const [isLogin, setIsLogin] = useState(true);

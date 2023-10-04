@@ -7,7 +7,7 @@ import Cookies from 'js-cookie'
 let data = ["", "", "", "", "", "", "", "", "" ]
 
 
-const OfflineTicTacToe = ({userName, resumeGame, gameState, setIsAuth, setGameMenu, setInRoom, setOffline}) =>{
+const OfflineTicTacToe = ({userName, resumeGame, gameState, setIsAuth, setGameMenu, setInRoom, setOffline, setResumeGame, setGameState}) =>{
     let [count, setCount] = useState(0);
     let [lock, setLock]  = useState(false)
    // const [data, setData] = useState(["", "", "", "", "", "", "", "", ""]);
@@ -104,6 +104,8 @@ const OfflineTicTacToe = ({userName, resumeGame, gameState, setIsAuth, setGameMe
             gameState : data,
             previousState: false
         }
+        setResumeGame(false);
+        setGameState(data);
         try {
             const response = await axios.post('https://tic-tac-toe-server-eohu.onrender.com/api/game/saveGame', request);
             // Handle the response from the server here
@@ -124,6 +126,10 @@ const OfflineTicTacToe = ({userName, resumeGame, gameState, setIsAuth, setGameMe
             const response = await axios.post('https://tic-tac-toe-server-eohu.onrender.com/api/game/saveGame', request);
             // Handle the response from the server here
             console.log(response.data); // Assuming the server returns JSON data
+            alert("Saved Game successfully")
+            setResumeGame(true);
+            setGameState(data);
+            
         } catch (error) {
             // Handle any errors that occur during the request
             console.error(error);

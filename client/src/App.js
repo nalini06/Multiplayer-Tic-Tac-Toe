@@ -23,19 +23,19 @@ function App() {
   if(isAuth){
       
     if(gameMenu){
-       componentToRender = <GameMenu  setOnline={setOnline} setOffline = {setOffline} resumeGame = {resumeGame} setResumeGame = {setResumeGame} setIsAuth={setIsAuth}/>
+       componentToRender = <GameMenu  setOnline={setOnline} setOffline = {setOffline} resumeGame = {resumeGame} setResumeGame = {setResumeGame} setIsAuth={setIsAuth} setGameState = {setGameState}/>
     }
     if(offline){
-      console.log("Game state" , gameState);
       componentToRender = <OfflineTicTacToe userName={userName} resumeGame = {resumeGame} gameState = {gameState} 
-      setIsAuth = {setIsAuth} setGameMenu = {setGameMenu} setInRoom = {setInRoom} setOffline = {setOffline}/>
+      setIsAuth = {setIsAuth} setGameMenu = {setGameMenu} setInRoom = {setInRoom} setOffline = {setOffline} setResumeGame = {setResumeGame} setGameState = {setGameState}/>
     }
     if(online){
       componentToRender = <JoinRoom setIsAuth={setIsAuth} userName={userName} socket = {socket} setInRoom={setInRoom} setRoomName = {setRoomName} 
       setOnline={setOnline} setPlayersData = {setPlayersData}/>
     }
     if(inRoom){
-      componentToRender = <TicTacToe userName={userName} roomName = {roomName} socket = {socket} playersData ={playersData}/>;
+      componentToRender = <TicTacToe userName={userName} roomName = {roomName} socket = {socket} playersData ={playersData}
+       setOnline={setOnline} setInRoom = {setInRoom}/>;
     }
   }else{
     componentToRender = <LoginSignup setIsAuth={setIsAuth} setUserName={setUserName} setGameMenu={setGameMenu} setResumeGame = {setResumeGame} setGameState = {setGameState}/>
