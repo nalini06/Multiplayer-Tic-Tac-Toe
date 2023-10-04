@@ -1,5 +1,4 @@
 import './CreateAndRoom.css';
-import Cookies from 'js-cookie';
 import React, { useState, useEffect } from 'react';
 
 

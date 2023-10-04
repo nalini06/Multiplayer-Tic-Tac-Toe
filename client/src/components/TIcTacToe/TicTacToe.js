@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from 'react'
 import './TicTacToe.css'
 import circle from '../assests/circle.png'
 import cross from '../assests/cross.png'
-import axios from 'axios'
+
 let data = ["", "", "", "", "", "", "", "", "" ]
 
 const TicTacToe = ({userName, roomName, socket ,setOnline, setInRoom}) =>{
@@ -21,13 +21,6 @@ const TicTacToe = ({userName, roomName, socket ,setOnline, setInRoom}) =>{
     let box_array = [box1, box2, box3, box4, box5, box6, box7, box8, box9]
     
     useEffect( () =>{
-         socket.on("play_again", () =>{
-            data = ["", "", "", "", "", "", "", "", "", ""];
-            box_array.map( (e)=>{
-            e.current.innerHTML = ""
-           })
-         })
-
          socket.on("winner", (payLoad) =>{
              won(payLoad.winner);
          })
@@ -125,7 +118,6 @@ const TicTacToe = ({userName, roomName, socket ,setOnline, setInRoom}) =>{
     const won = async(winner) =>{
         socket.emit("won", {roomName, "winner": winner, "username" : userName})
         //Update Winnings of the user
-       
         setLock(true);
         if(winner ==="x"){
             titleRef.current.innerHTML = `Congratulations: <img src=${cross} wins>`
@@ -134,19 +126,12 @@ const TicTacToe = ({userName, roomName, socket ,setOnline, setInRoom}) =>{
         }
     }
 
-    const reset = () =>{
-        setLock(false);
-        data = ["", "", "", "", "", "", "", "", "", ""];
-        titleRef.current.innerHTML = 'Tic Tac Toe'
-        box_array.map( (e)=>{
-            e.current.innerHTML = ""
-        })
-        socket.emit('updateGame', data);
-    }
-
     const handleMenu = () =>{
+        titleRef.current.innerHTML = "Tic Tac Toe"
+        socket.close();
         setInRoom(false);
-        setOnline(false);
+        
+        
     }
 
     return (
