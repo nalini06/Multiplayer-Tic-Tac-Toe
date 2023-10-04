@@ -125,7 +125,7 @@ const OfflineTicTacToe = ({userName, resumeGame, gameState, setIsAuth, setGameMe
             // Handle the response from the server here
             
             console.log(response.data); // Assuming the server returns JSON data
-            alert("Saved Game Successfullly)
+            alert("Saved Game Successfully")
         } catch (error) {
             // Handle any errors that occur during the request
             console.error(error);
