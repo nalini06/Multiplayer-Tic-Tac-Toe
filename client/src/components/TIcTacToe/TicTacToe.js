@@ -129,9 +129,13 @@ const TicTacToe = ({userName, roomName, socket ,setOnline, setInRoom}) =>{
     const handleMenu = () =>{
         titleRef.current.innerHTML = "Tic Tac Toe"
         socket.close();
+        setLock(false);
+        data = ["", "", "", "", "", "", "", "", "", ""];
+        titleRef.current.innerHTML = 'Tic Tac Toe'
+        box_array.map( (e)=>{
+            e.current.innerHTML = ""
+        } )
         setInRoom(false);
-        
-        
     }
 
     return (
