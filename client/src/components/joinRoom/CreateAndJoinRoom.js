@@ -46,6 +46,7 @@ function JoinRoom({setIsAuth, userName, socket, setInRoom, setRoomName, setOnlin
     if(roomNameInput === ''){
       alert("Please enter room name and join room")
     }else{
+      socket.connect();
       const payLoad = {
         "username": userName,
         "roomName": roomNameInput 
