@@ -123,6 +123,7 @@ const OfflineTicTacToe = ({userName, resumeGame, gameState, setIsAuth, setGameMe
         try {
             const response = await axios.post('https://tic-tac-toe-server-eohu.onrender.com/api/game/saveGame', request);
             // Handle the response from the server here
+            alert("Saved Game Successfullly)
             console.log(response.data); // Assuming the server returns JSON data
         } catch (error) {
             // Handle any errors that occur during the request
