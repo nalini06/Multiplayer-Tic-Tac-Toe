@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import './GameMenu.css'; // Import the CSS file
 
-function GameMenu({ setOnline, setOffline, resumeGame, setResumeGame }) {
+function GameMenu({ setOnline, setOffline, resumeGame, setResumeGame, setIsAuth }) {
   const handleResumeGame = () => {
      setOffline(true); 
   }
@@ -17,12 +17,17 @@ function GameMenu({ setOnline, setOffline, resumeGame, setResumeGame }) {
     setOnline(true);
   }
 
+  const handleLogOut = () =>{
+      setIsAuth(false);
+  }
+
   return (
     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
       <h1 className="GameMenuTitle">Game Menu</h1>
       {resumeGame && <button className="CndJbutton" onClick={handleResumeGame}>Resume Game</button>}
       <button className="CndJbutton" onClick={handleStartNewGame}>Start a New Game</button>
       <button className="CndJbutton" onClick={handlePlayOnline}>Play Online</button>
+      <button className="logout-button" onClick={handleLogOut}>Logout</button>
     </div>
   );
 }

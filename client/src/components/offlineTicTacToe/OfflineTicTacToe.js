@@ -7,12 +7,10 @@ import Cookies from 'js-cookie'
 let data = ["", "", "", "", "", "", "", "", "" ]
 
 
-const OfflineTicTacToe = ({userName, resumeGame, gameState, setIsAuth, setGameMenu, setInRoom}) =>{
+const OfflineTicTacToe = ({userName, resumeGame, gameState, setIsAuth, setGameMenu, setInRoom, setOffline}) =>{
     let [count, setCount] = useState(0);
     let [lock, setLock]  = useState(false)
    // const [data, setData] = useState(["", "", "", "", "", "", "", "", ""]);
-   const initialData = ["", "", "", "", "", "", "", "", ""];
-   const [gameStateData, setGameStateData] = useState(initialData);
     let titleRef = useRef(null)
     let box1 = useRef(null);
     let box3 = useRef(null);
@@ -27,7 +25,19 @@ const OfflineTicTacToe = ({userName, resumeGame, gameState, setIsAuth, setGameMe
 
     useEffect(() => {
         if (resumeGame) {
-          setGameStateData(gameState);
+          data = gameState
+          for(let i = 0 ;i<box_array.length; i++){
+            if(box_array[i].current === null){
+                box_array[i].current = ""
+            }
+            if (data[i] === 'x') {
+                box_array[i].current.innerHTML = `<img src='${cross}'></img>`;
+              } else if (data[i] === 'o') {
+                box_array[i].current.innerHTML = `<img src='${circle}'></img>`;
+              }else {
+              box_array[i].current.innerHTML = ""; // Clear the box if data is empty
+            }
+        }
         }
       }, [resumeGame, gameState]);
     
@@ -120,11 +130,11 @@ const OfflineTicTacToe = ({userName, resumeGame, gameState, setIsAuth, setGameMe
         }
     }
 
-    const handleLogOut = () => {
+    const handleMenu = () => {
         Cookies.set('token', '')
-        setIsAuth(false);
         setInRoom(false);
-        setGameMenu(false);
+        setOffline(false);
+        setGameMenu(true);
      }
 
     return (
@@ -137,26 +147,26 @@ const OfflineTicTacToe = ({userName, resumeGame, gameState, setIsAuth, setGameMe
            </div>
            <div className = "board">
                <div className = "row1">
-                  <div className = "boxes" ref = {box1} onClick={(e)=>{toggle(e, 0)}} >{ gameStateData[0] === "x" ? <img src={cross} alt="cross" /> : gameStateData[0] === "o" ? <img src={circle} alt="circle" /> : "" }</div>
-                  <div className = "boxes" ref = {box2} onClick={(e)=>{toggle(e, 1)}} >{ gameStateData[1] === "x" ? <img src={cross} alt="cross" /> : gameStateData[1] === "o" ? <img src={circle} alt="circle" /> : "" }</div>
-                  <div className = "boxes" ref = {box3} onClick={(e)=>{toggle(e, 2)}} >{ gameStateData[2] === "x" ? <img src={cross} alt="cross" /> : gameStateData[2] === "o" ? <img src={circle} alt="circle" /> : "" }</div>
+                  <div className = "boxes" ref = {box1} onClick={(e)=>{toggle(e, 0)}} ></div>
+                  <div className = "boxes" ref = {box2} onClick={(e)=>{toggle(e, 1)}} ></div>
+                  <div className = "boxes" ref = {box3} onClick={(e)=>{toggle(e, 2)}} ></div>
                </div>
                <div className = "row2">
-                  <div className = "boxes" ref = {box4} onClick={(e)=>{toggle(e, 3)}} >{ gameStateData[3] === "x" ? <img src={cross} alt="cross" /> : gameStateData[3] === "o" ? <img src={circle} alt="circle" /> : "" }</div>
-                  <div className = "boxes" ref = {box5} onClick={(e)=>{toggle(e, 4)}} >{ gameStateData[4] === "x" ? <img src={cross} alt="cross" /> : gameStateData[4] === "o" ? <img src={circle} alt="circle" /> : "" }</div>
-                  <div className = "boxes" ref = {box6} onClick={(e)=>{toggle(e, 5)}} >{ gameStateData[5] === "x" ? <img src={cross} alt="cross" /> : gameStateData[5] === "o" ? <img src={circle} alt="circle" /> : "" }</div>
+                  <div className = "boxes" ref = {box4} onClick={(e)=>{toggle(e, 3)}} ></div>
+                  <div className = "boxes" ref = {box5} onClick={(e)=>{toggle(e, 4)}} ></div>
+                  <div className = "boxes" ref = {box6} onClick={(e)=>{toggle(e, 5)}} ></div>
                </div>
                <div className = "row3">
-                  <div className = "boxes" ref = {box7} onClick={(e)=>{toggle(e, 6)}} >{ gameStateData[6] === "x" ? <img src={cross} alt="cross" /> : gameStateData[6] === "o" ? <img src={circle} alt="circle" /> : "" }</div>
-                  <div className = "boxes" ref = {box8} onClick={(e)=>{toggle(e, 7)}} >{ gameStateData[7] === "x" ? <img src={cross} alt="cross" /> : gameStateData[7] === "o" ? <img src={circle} alt="circle" /> : "" }</div>
-                  <div className = "boxes" ref = {box9} onClick={(e)=>{toggle(e, 8)}} >{ gameStateData[8] === "x" ? <img src={cross} alt="cross" /> : gameStateData[8] === "o" ? <img src={circle} alt="circle" /> : "" }</div>
+                  <div className = "boxes" ref = {box7} onClick={(e)=>{toggle(e, 6)}} ></div>
+                  <div className = "boxes" ref = {box8} onClick={(e)=>{toggle(e, 7)}} ></div>
+                  <div className = "boxes" ref = {box9} onClick={(e)=>{toggle(e, 8)}} ></div>
                </div>
            </div>
            <button className="reset" onClick={saveGame} style={{ marginRight: '10px' }}>
           Save Game
         </button>
            <button className = "reset" onClick={ ()=>{reset()} }>Reset</button>
-           <button className="logout-button"onClick={handleLogOut}>Logout</button>
+           <button className="logout-button"onClick={handleMenu}>Menu</button>
         </div>
     )
 }

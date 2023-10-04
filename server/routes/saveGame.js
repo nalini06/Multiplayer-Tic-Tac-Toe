@@ -1,10 +1,11 @@
 const express = require('express')
-const saveGameController = require('../controller/saveGame')
+const gameController = require('../controller/saveGame')
 const router = express.Router()
 
 
-router.route('/saveGame').post(saveGameController.saveGame);
-router.route('/getUser').get(saveGameController.getUser)
+router.route('/saveGame').post(gameController.saveGame);
+router.route('/getUser').get(gameController.getUser)
+router.route('/updateWin').post(gameController.updateWin)
 
 
 module.exports = router

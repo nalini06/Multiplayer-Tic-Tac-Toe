@@ -17,6 +17,10 @@ const UserSchema = new mongoose.Schema({
     previousState: {
         type: Boolean,
         default: false
+    },
+    wins: {
+        type: Number,
+        default: 0
     }
 })
 

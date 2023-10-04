@@ -33,8 +33,6 @@ const LoginSignup = ({ setIsAuth, setUserName, setGameMenu, setResumeGame, setGa
           setIsAuth(true);
           setUserName(username)
           setGameMenu(true)
-          Cookies.set('token',token);
-          Cookies.set('username', username)
         }else{
           if(user.previousState){
             setGameState(user.gameState)
@@ -43,8 +41,6 @@ const LoginSignup = ({ setIsAuth, setUserName, setGameMenu, setResumeGame, setGa
           setIsAuth(true);
           setUserName(username)
           setGameMenu(true)
-          Cookies.set('token',token);
-          Cookies.set('username', username)
         }
 
        

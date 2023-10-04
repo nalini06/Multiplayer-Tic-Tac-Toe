@@ -2,7 +2,7 @@ const express = require('express');
 const app = express();
 const http = require('http');
 const authRouter = require('./routes/authRouter')
-const saveGameRoute = require('./routes/saveGame')
+const gameRoute = require('./routes/saveGame')
 const connectDB = require('./db/connect')
 const {Server} = require('socket.io');
 const cors = require('cors')
@@ -14,7 +14,7 @@ require('dotenv').config()
 
 
 app.use('/api/users', authRouter);
-app.use('/api/game', saveGameRoute)
+app.use('/api/game', gameRoute)
 
 
 const io = new Server( server, {
@@ -32,48 +32,23 @@ let rooms = new Map();
 io.on("connection", (socket) =>{
      console.log("user connected into " +socket.id);
      
-     socket.on("create_room", (roomData) =>{
-      rooms.set(roomData.roomName, {players: [socket.id]})
-      socket.join(roomData.roomName);
-      console.log(rooms);
-      socket.emit('room_created', roomData);
-      console.log("Room Created for " + roomData);
-     })
-
      socket.on("start_game", (data) =>{
+      const username = data.username;
+      const roomName = data.roomName;
       const clientsInRoom = io.sockets.adapter.rooms.get(data);
       console.log(`Clients in room ${data}:`, clientsInRoom);
-      socket.in(data).emit("game_start");
+      const payLoad = {
+        "startedBy" : username
+      }
+      socket.in(roomName).emit("game_start", payLoad);
      })
 
      socket.on('join_room', (data) => {
-      socket.join(data);
+      socket.join(data.roomName);
       socket.emit("joined_room");
       console.log(`Usesr with id: ${socket.id} joined room: ${data}`);
    });
 
-  /*
-
-     socket.on('join_room', (roomData) => {
-      const roomName = roomData.roomName;
-      if (rooms.has(roomName)) {
-        const room = rooms.get(roomName);
-        socket.join(roomName);
-        room.players.push(socket.id);
-        console.log(rooms);
-        const clientsInRoom = io.sockets.adapter.rooms.get(roomName);
-        console.log(`Clients in room ${roomName}:`, clientsInRoom);
-        // Notify both players in the room that the game can start
-        io.in("1234").emit("game_start");
-        console.log("Connected to both rooms");
-      } else {
-        // Notify the client that the room doesn't exist
-        console.log("not found room");
-        socket.emit('room_not_found');
-      }
-    });
-
-    */
      
      socket.on("send_data", (payLoad) =>{
       const roomName = payLoad.roomName;

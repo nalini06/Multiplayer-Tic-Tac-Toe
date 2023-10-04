@@ -2,14 +2,14 @@ import React, { useState, useRef, useEffect } from 'react'
 import './TicTacToe.css'
 import circle from '../assests/circle.png'
 import cross from '../assests/cross.png'
+import axios from 'axios'
 let data = ["", "", "", "", "", "", "", "", "" ]
 
-const TicTacToe = ({userName, roomName, socket}) =>{
+const TicTacToe = ({userName, roomName, socket ,playersData}) =>{
     let [count, setCount] = useState(0);
     let [lock, setLock]  = useState(false)
-    const initialData = ["", "", "", "", "", "", "", "", ""];
-    const [gameStateData, setGameStateData] = useState(initialData);
-   // const [data, setData] = useState(["", "", "", "", "", "", "", "", ""]);
+    let [xPlayer, setXPlayer] = useState(false)
+    let [oPlayer, setOPlayer] = useState('')
     let titleRef = useRef(null)
     let box1 = useRef(null);
     let box2 = useRef(null);
@@ -30,6 +30,9 @@ const TicTacToe = ({userName, roomName, socket}) =>{
 
     useEffect( () =>{
           socket.on("receive_message", (payLoad) =>{
+            if(userName == payLoad.startedBy){
+                setXPlayer(true);
+            }
             data  = payLoad.data;
             for(let i = 0 ;i<box_array.length; i++){
                 if(box_array[i].current === null){
@@ -118,8 +121,19 @@ const TicTacToe = ({userName, roomName, socket}) =>{
         }
     }
 
-    const won = (winner) =>{
-        socket.emit("won", {roomName, "winner": winner})
+    const won = async(winner) =>{
+        socket.emit("won", {roomName, "winner": winner, "username" : userName})
+        //Update Winnings of the user
+        const payLoad = {
+            "username" : userName
+        }
+        try{
+            await axios("https://tic-tac-toe-server-eohu.onrender.com/api/game/updateWin", payLoad) 
+        }catch(error){
+            console.log(error);
+        }
+        
+
         setLock(true);
         if(winner ==="x"){
             titleRef.current.innerHTML = `Congratulations: <img src=${cross} wins>`
@@ -140,12 +154,8 @@ const TicTacToe = ({userName, roomName, socket}) =>{
 
     return (
         <div className = 'container'>
-           
            <h1 className = "title" ref={titleRef}>Tic Tac Toe Game In <span>React</span></h1>
-           <h4 className='userName' >Player: {userName}</h4> {/* Display the userName here */}
-           <div>
-             
-           </div>
+           <h4 className='userName'>Player: {userName}</h4>
            <div className = "board">
                <div className = "row1">
                   <div className = "boxes" ref = {box1} onClick={(e)=>{toggle(e, 0)}} >  </div>

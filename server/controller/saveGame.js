@@ -48,3 +48,15 @@ exports.getUser = async (req, res)=>{
       res.status(401)
    }
 }
+
+
+exports.updateWin = async (req, res) =>{
+    const {username} = req.body;
+    try{
+        const user = await user.findOne({username});
+        user.wins += 1;
+        await user.save();
+    }catch(error){
+         res.status(400).json({"message" : "failed to update wins "})
+    }
+}

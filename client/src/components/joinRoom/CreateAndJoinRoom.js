@@ -5,14 +5,17 @@ import React, { useState, useEffect } from 'react';
 
 
 
-function JoinRoom({setIsAuth, userName, socket, setInRoom, setRoomName}) {
+function JoinRoom({setIsAuth, userName, socket, setInRoom, setRoomName, setOnline, setPlayersData}) {
 
   const [roomNameInput, setRoomNameInput] = useState('');
   const [instruction, setInstruction] = useState('Enter room name');
 
   useEffect(() => {
     socket.on("game_start", () =>{
-      console.log("game started");
+      console.log("game started", (payLoad) =>{
+        setPlayersData(payLoad);
+      });
+      
       setInRoom(true);
     });
     
@@ -25,13 +28,16 @@ function JoinRoom({setIsAuth, userName, socket, setInRoom, setRoomName}) {
    }, [socket]); // Add inRoom as a dependency 
 
   const handleLogOut = () => {
-     Cookies.set('token', '')
-     setIsAuth(false);
+     setOnline(false);
   }
 
   const handleStartGame = () => {
     if (roomNameInput.trim() !== '') {
-      socket.emit('start_game',  roomNameInput );
+      const payLoad = {
+        "username" : userName,
+        "roomName": roomNameInput
+      }
+      socket.emit('start_game',  payLoad );
       setInRoom(true);
       console.log("created room");
     }
@@ -41,7 +47,11 @@ function JoinRoom({setIsAuth, userName, socket, setInRoom, setRoomName}) {
     if(roomNameInput === ''){
       alert("Please enter room name and join room")
     }else{
-      socket.emit('join_room', roomNameInput );
+      const payLoad = {
+        "username": userName,
+        "roomName": roomNameInput 
+      }
+      socket.emit('join_room', payLoad );
       setInstruction("Joining the room please wait")
       setRoomName(roomNameInput);
       console.log("Joined room");
@@ -68,7 +78,7 @@ function JoinRoom({setIsAuth, userName, socket, setInRoom, setRoomName}) {
       <div className="button-container">
         <button className="CndJbutton" onClick={handleJoinRoom}>Join Room</button>
         <button className="CndJbutton" onClick={handleStartGame}>Start Game</button>
-        <button className="logout-button"onClick={handleLogOut}>Logout</button>
+        <button className="logout-button"onClick={handleLogOut}>Menu</button>
       </div>
     </div>
   );
