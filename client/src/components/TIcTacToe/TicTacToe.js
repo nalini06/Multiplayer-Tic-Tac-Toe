@@ -127,6 +127,7 @@ const TicTacToe = ({userName, roomName, socket ,setOnline, setInRoom}) =>{
     }
 
     const handleMenu = () =>{
+        socket.emit("leave_room", roomName);
         titleRef.current.innerHTML = "Tic Tac Toe"
         socket.close();
         setLock(false);
@@ -134,7 +135,8 @@ const TicTacToe = ({userName, roomName, socket ,setOnline, setInRoom}) =>{
         titleRef.current.innerHTML = 'Tic Tac Toe'
         box_array.map( (e)=>{
             e.current.innerHTML = ""
-        } )
+        })
+        setCount(0);
         setInRoom(false);
     }
 

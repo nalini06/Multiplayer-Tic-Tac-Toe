@@ -49,6 +49,10 @@ io.on("connection", (socket) =>{
       console.log(`Usesr with id: ${socket.id} joined room: ${data}`);
    });
 
+   socket.on('leave_room', (roomName) =>{
+      socket.leave(roomName);
+   })
+
      
      socket.on("send_data", (payLoad) =>{
       const roomName = payLoad.roomName;
