@@ -125,16 +125,7 @@ const TicTacToe = ({userName, roomName, socket ,setOnline, setInRoom}) =>{
     const won = async(winner) =>{
         socket.emit("won", {roomName, "winner": winner, "username" : userName})
         //Update Winnings of the user
-        const payLoad = {
-            "username" : userName
-        }
-        try{
-            await axios.post("https://tic-tac-toe-server-eohu.onrender.com/api/game/updateWin", payLoad) 
-        }catch(error){
-            console.log(error);
-        }
-        
-
+       
         setLock(true);
         if(winner ==="x"){
             titleRef.current.innerHTML = `Congratulations: <img src=${cross} wins>`
